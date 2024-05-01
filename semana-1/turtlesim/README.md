@@ -1,0 +1,2 @@
+Nesse projeto foi feito um script para que fosse feito um desenho por uma tartaruga do Turtlesim. Nesse sentindo, para executar esse projeto clone ou baixe esse repositório [https://github.com/Edustn/Modulo-6/tree/main/semana-1/turtlesim](https://github.com/Edustn/Modulo-6/tree/main/semana-1/turtlesim). 
+Após fazer isso, 
