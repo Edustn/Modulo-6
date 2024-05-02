@@ -10,7 +10,7 @@ Substitua my_env pelo nome do seu ambiente virtual.
 
 3. Instale as dependências: Navegue até o diretório do projeto e instale as dependências listadas no arquivo requirements.txt com o seguinte comando: `pip install -r requirements.txt`
 
-4. Construa o projeto: Na raiz do projeto, execute o seguinte comando para baixar e construir os pacotes necessários: `colcon build` 
+4. Construa o projeto: Na raiz do projeto, execute o seguinte comando para baixar e construir os pacotes necessários: `colcon build` e também não se esqueça de dar o comando `source install/local_setup.bash`
 
 5. Execute o TurtleSim: Abra um terminal e execute o TurtleSim com o seguinte comando: `ros2 run turtlesim turtlesim_node`
 
@@ -19,3 +19,5 @@ Isso abrirá a tela do TurtleSim com uma tartaruga.
 6. Execute o script do projeto: Em outro terminal, navegue até o diretório do projeto e execute o script responsável por enviar comandos para o desenho da tartaruga e manipulá-la. Use o seguinte comando: `ros2 run ola_mundo ola`
 
 Isso iniciará a sequência de desenhos da tartaruga, seguida pelo aparecimento de uma nova tartaruga e, eventualmente, a morte dela após um determinado tempo.
+
+**Link do vídeo de demonstração**: [https://drive.google.com/file/d/1fI4RPuVKmwenyUNfzorUFgIIOF2nx3pL/view?usp=drive_link](https://drive.google.com/file/d/1fI4RPuVKmwenyUNfzorUFgIIOF2nx3pL/view?usp=drive_link)
