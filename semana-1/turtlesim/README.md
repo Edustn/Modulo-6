@@ -16,8 +16,8 @@ Substitua my_env pelo nome do seu ambiente virtual.
 
 Isso abrirá a tela do TurtleSim com uma tartaruga.
 
-6. Execute o script do projeto: Em outro terminal, navegue até o diretório do projeto e execute o script responsável por enviar comandos para o desenho da tartaruga e manipulá-la. Use o seguinte comando: `ros2 run ola_mundo ola`
+6. Execute o script do projeto: Em outro terminal, navegue até o diretório do projeto e execute o script responsável por enviar comandos para o desenho da tartaruga e manipulá-la. Use o seguinte comando:`source install/local_setup.bash`(pois abrimos um novo terminal). Após isso faça o seguinte comando: `ros2 run ola_mundo ola`
 
 Isso iniciará a sequência de desenhos da tartaruga, seguida pelo aparecimento de uma nova tartaruga e, eventualmente, a morte dela após um determinado tempo.
 
-**Link do vídeo de demonstração**: [https://drive.google.com/file/d/1fI4RPuVKmwenyUNfzorUFgIIOF2nx3pL/view?usp=drive_link](https://drive.google.com/file/d/1fI4RPuVKmwenyUNfzorUFgIIOF2nx3pL/view?usp=drive_link)
+**Link do vídeo de demonstração**: [https://drive.google.com/file/d/1qUvo7B2jk8QI027U01blroWI3gruWAV_/view?usp=sharing](https://drive.google.com/file/d/1qUvo7B2jk8QI027U01blroWI3gruWAV_/view?usp=sharing)

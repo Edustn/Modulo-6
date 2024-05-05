@@ -22,15 +22,13 @@ class TurtleController(Node):
 def desenho(controller):
     # Movimentos para desenhar um coração
     movements = [
-        (0.0, 0.0),    # Iniciar
-        (1.0, 0.0),    # Parte superior esquerda
-        (1.0, -1.0),   # Parte inferior esquerda
-        (1.0, -0.5),   # Curva inferior esquerda
-        (1.0, 0.0),    # Curva inferior esquerda
-        (1.0, 0.5),    # Curva inferior direita
-        (1.0, 0.5),    # Parte inferior direita
-        # (1.0, -1.0),   # Parte superior direita
-        # (1.0, 0.0),    # Curva superior direita
+        (0.0, 0.0),  
+        (1.0, 0.0),   
+        (1.0, -1.0),  
+        (1.0, -0.5),   
+        (1.0, 0.0),   
+        (1.0, 0.5),    
+        (1.0, 0.0),    
     ]
 
     # Executar os movimentos
@@ -40,17 +38,12 @@ def desenho(controller):
 
 
     movements_inversos = [
-        (0.0, 0.0),    # Iniciar
-        (-1.0,- 0.0),    # Parte superior esquerda
-        (-1.0, 1.0),   # Parte inferior esquerda
-        (-1.0, 0.5),   # Curva inferior esquerda
-        (-1.0, 0.0),    # Curva inferior esquerda
-        # (-1.0, -0.5),    # Curva inferior direita
-        (-1.0, -0.5),    # Parte inferior direita
-        # (-1.0, 1.0),   # Parte superior direita
-        # (-1.0, 0.0),    # Curva superior direita
-        # (-2.0, 0.0),    # Curva superior direita
-        # (-3.0, 0.0),    # Curva superior direita
+        (0.0, 0.0),   
+        (-1.0,- 0.0),    
+        (-1.0, 1.0),   
+        (-1.0, 0.5),   
+        (-1.0, 0.0),    
+        (-1.0, -0.5),    
     ]
 
     # Executar os movimentos
@@ -62,8 +55,7 @@ def desenho(controller):
 
 
     movements_circle = [
-        (1.0, 0.5)     # Exemplo de movimento linear e angular para desenhar um círculo
-        # Adicione mais movimentos conforme necessário para desenhar um círculo completo
+        (1.0, 0.5)     
     ]
 
     # Executar os movimentos para desenhar o círculo
@@ -78,7 +70,7 @@ def main(args=None):
     rclpy.init(args=args)
     controller = TurtleController()
 
-    print("Desenhando um coração no Turtlesim...")
+    print("Desenhando no Turtlesim...")
     
     
     set_pen_color( 255, 0, 0)
@@ -115,8 +107,7 @@ def main(args=None):
     future_kill = kill_client.call_async(kill_request)
     rclpy.spin_until_future_complete(node, future_kill)
     if future_kill.result() is not None:
-        print(1)
-        # print('Turtle killed successfully:', future_kill.result().name)
+        print('Turtle killed successfully')
     else:
         print('Failed to kill turtle')
     
