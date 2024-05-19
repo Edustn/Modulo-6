@@ -40,6 +40,9 @@ def main(args=None):
     node = TeleopTurtle()
 
     try:
+        print("Para movimentar o robô utilize as teclas A,W,S,D")
+        print(" Em caso de uma parada de emergência tecle S")
+        print("Em caso que necessite que o robô fique inoperante tecle F")
         while True:
             key = get_key()
             if key == '\x03':
