@@ -3,7 +3,7 @@ Para executar esse projeto garanta que você tenha o ambiente ROS instalado. Al�
 
 Após isso, abra um terminal e execute o comando `ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py` para abrir o Gazebo (ambiente que emula o TurtleBot3)
 
-Depois disso, execute o comando: `python3 main.py` para executar o Script principal para teleoperar o robô.
+Depois disso, execute o em um terminal execute o comando: `python3 service.py` para rodar o servidor e em outra terminal execute o comando: `python3 main.py` para executar o Script principal para teleoperar o robô.
 
 **Obs:** Esses comando estão sendo executados no temrinal Bash. Então sugiro que para não ter complicações para execução.
 
