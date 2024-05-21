@@ -11,6 +11,10 @@ class StopRobotService(Node):
 
     def stop_robot_callback(self, request, response):
         self.get_logger().info('Stopping the robot and killing the process...')
+<<<<<<< HEAD
+=======
+        
+>>>>>>> refs/remotes/origin/main
         
         # Matando o processo de operação
         os.kill(os.getpid(), signal.SIGINT)
