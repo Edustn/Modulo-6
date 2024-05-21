@@ -42,7 +42,7 @@ def main(args=None):
     try:
         print("Para movimentar o robô utilize as teclas A,W,S,D")
         print(" Em caso de uma parada de emergência tecle S")
-        print("Em caso que necessite que o robô fique inoperante tecle F")
+        print("Em caso que necessite que o robô fique inoperante tecle F para ele não executar mais nenhuma movimentação")
         while True:
             key = get_key()
             if key == '\x03':
