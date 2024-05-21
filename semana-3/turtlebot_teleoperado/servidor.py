@@ -11,7 +11,7 @@ class StopRobotService(Node):
 
     def stop_robot_callback(self, request, response):
         self.get_logger().info('Stopping the robot and killing the process...')
-        # Aqui você deve incluir a lógica para parar o robô, se necessário.
+        
         
         # Matando o processo de operação
         os.kill(os.getpid(), signal.SIGINT)
