@@ -28,7 +28,7 @@ class TeleopTurtle(Node):
         else:
             self.get_logger().error('Service call failed')
 
-def get_key():
+def get_key():  
     tty.setraw(sys.stdin.fileno())
     select.select([sys.stdin], [], [], 0)
     key = sys.stdin.read(1)
