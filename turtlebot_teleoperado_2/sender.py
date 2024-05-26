@@ -1,6 +1,7 @@
 import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import CompressedImage
+from std_msgs.msg import String  
 import cv2
 import numpy as np
 import threading
@@ -13,6 +14,9 @@ class WebcamPublisher(Node):
     def __init__(self):
         super().__init__('webcam_publisher')
         self.publisher_ = self.create_publisher(CompressedImage, '/video_frames', 10)
+
+        self.latency_publisher_ = self.create_publisher(String, '/latency', 10)  # New latency topic
+
         self.timer = self.create_timer(0.1, self.timer_callback)  
         self.cap = cv2.VideoCapture(index=0)
         self.latency_thread = threading.Thread(target=self.latencia)
@@ -51,9 +55,12 @@ class WebcamPublisher(Node):
             
             new = cv2.getTickCount()
 
-            print("{:.3f} sec, {:.3f} frames".format(
-                (new - prev_tick) / cv2.getTickFrequency(),
-                frame_number - prev_change_frame))
+            latency = (new - prev_tick) / cv2.getTickFrequency()
+            latency_msg = String()
+            latency_msg.data = "{:.3f} sec".format(latency)
+            self.latency_publisher_.publish(latency_msg)
+
+            print("{:.3f} sec, {:.3f} frames".format(latency, frame_number - prev_change_frame))
 
             prev_tick = new
             prev_change_frame = frame_number

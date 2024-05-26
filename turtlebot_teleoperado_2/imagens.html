@@ -1,50 +1,71 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta charset="utf-8" />
+  <meta charset="utf-8" />
 
-<!-- ROS libraries -->
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/eventemitter2@6.4.9/lib/eventemitter2.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/roslib@1/build/roslib.min.js"></script>
+  <!-- ROS libraries -->
+  <script type="text/javascript"
+    src="https://cdn.jsdelivr.net/npm/eventemitter2@6.4.9/lib/eventemitter2.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/roslib@1/build/roslib.min.js"></script>
 
-<script type="text/javascript">
-  var ros = new ROSLIB.Ros({
-    url : 'ws://localhost:9090'
-  });
+  <script type="text/javascript">
+    var ros = new ROSLIB.Ros({
+      url: 'ws://localhost:9090'
+    });
 
-  ros.on('connection', function() {
-    console.log('Connected to websocket server.');
-  });
+    ros.on('connection', function () {
+      console.log('Connected to websocket server.');
+    });
 
-  ros.on('error', function(error) {
-    console.log('Error connecting to websocket server: ', error);
-  });
+    ros.on('error', function (error) {
+      console.log('Error connecting to websocket server: ', error);
+    });
 
-  ros.on('close', function() {
-    console.log('Connection to websocket server closed.');
-  });
+    ros.on('close', function () {
+      console.log('Connection to websocket server closed.');
+    });
 
-  // Topic to receive video frames
-  var videoTopic = new ROSLIB.Topic({
-    ros : ros,
-    name : '/video_frames',
-    messageType : 'sensor_msgs/CompressedImage'
-  });
+    // Topic to receive video frames
+    var videoTopic = new ROSLIB.Topic({
+      ros: ros,
+      name: '/video_frames',
+      messageType: 'sensor_msgs/CompressedImage'
+    });
 
-  // Function to handle incoming video frames
-  videoTopic.subscribe(function(message) {
-    var img = document.getElementById('videoStream');
-    img.src = 'data:image/jpeg;base64,' + message.data;
-  });
+    // Topic to receive latency
+    var latencyTopic = new ROSLIB.Topic({
+      ros: ros,
+      name: '/latency',
+      messageType: 'std_msgs/String'
+    });
 
-  window.onload = function() {
-    // Subscribe to video frames once
-    videoTopic.subscribe();
-  };
-</script>
+    // Function to handle incoming video frames
+    videoTopic.subscribe(function (message) {
+      var img = document.getElementById('videoStream');
+      img.src = 'data:image/jpeg;base64,' + message.data;
+    });
+
+    // Function to handle incoming latency
+    latencyTopic.subscribe(function (message) {
+      var latencySpan = document.getElementById('latency');
+      latencySpan.innerText = message.data;
+    });
+
+    window.onload = function () {
+      // Subscribe to video frames once
+      videoTopic.subscribe();
+      latencyTopic.subscribe();  // Subscribe to latency topic
+    };
+  </script>
 </head>
-<body>
-  <h1>Real-time Video Stream from ROS2 Topic</h1>
-  <img id="videoStream" alt="Video Stream" style="width: 640px; height: 480px;" />
+
+<body style="background-color:  #007FFF;">
+  <h1 style="text-align: center;">Imagens do TurtleBot3</h1>
+  <div style="text-align: center;">
+    <img id="videoStream" alt="Video Stream" style="width: 640px; height: 480px;" />
+  </div>
+  <h2 style="text-align: center;">Latency: <span id="latency">N/A</span></h2>
 </body>
+
 </html>
