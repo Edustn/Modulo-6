@@ -2,6 +2,15 @@
 <html>
 
 <head>
+  <style>
+    .botoes {
+      background-color: rgb(158, 158, 240);
+      border: none;
+      border-radius: 15%;
+      padding: 4%;
+      cursor: pointer;
+    }
+  </style>
   <meta charset="utf-8" />
 
   <!-- ROS libraries -->
@@ -52,20 +61,105 @@
       latencySpan.innerText = message.data;
     });
 
+    // Publishing Twist messages to control the robot
+    var cmdVelTopic = new ROSLIB.Topic({
+      ros: ros,
+      name: 'cmd_vel',
+      messageType: 'geometry_msgs/Twist'
+    });
+
+    function sendCmdVel(linearVel, angularVel) {
+      var twist = new ROSLIB.Message({
+        linear: {
+          x: linearVel,
+          y: 0.0,
+          z: 0.0
+        },
+        angular: {
+          x: 0.0,
+          y: 0.0,
+          z: angularVel
+        }
+      });
+      cmdVelTopic.publish(twist);
+      console.log("Linear Vel: " + linearVel + ", Angular Vel: " + angularVel);
+    }
+
+    // Calling the stop_robot service
+    var stopRobotClient = new ROSLIB.Service({
+      ros: ros,
+      name: 'stop_robot',
+      serviceType: 'std_srvs/Empty'
+    });
+
+    function stopRobot() {
+      var request = new ROSLIB.ServiceRequest({});
+      stopRobotClient.callService(request, function (result) {
+        console.log('Robô parado com sucesso.');
+      }, function (error) {
+        console.error('Falha ao parar o robô: ' + error);
+      });
+    }
+
     window.onload = function () {
-      // Subscribe to video frames once
+      // Subscribe to video frames and latency once
       videoTopic.subscribe();
-      latencyTopic.subscribe();  // Subscribe to latency topic
+      latencyTopic.subscribe();
     };
+
+    // Event listeners for keyboard control
+    var keysPressed = {};
+
+    document.addEventListener('keydown', function(event) {
+      keysPressed[event.key] = true;
+      updateRobotVelocity();
+    });
+
+    document.addEventListener('keyup', function(event) {
+      delete keysPressed[event.key];
+      updateRobotVelocity();
+    });
+
+    function updateRobotVelocity() {
+      var linearVel = 0.0;
+      var angularVel = 0.0;
+
+      if (keysPressed['w'] || keysPressed['W']) {
+        linearVel = 0.2;
+      }
+      if (keysPressed['x'] || keysPressed['X']) {
+        linearVel = -0.2;
+      }
+      if (keysPressed['a'] || keysPressed['A']) {
+        angularVel = 0.5;
+      }
+      if (keysPressed['d'] || keysPressed['D']) {
+        angularVel = -0.5;
+      }
+
+      sendCmdVel(linearVel, angularVel);
+    }
+
+    
   </script>
 </head>
 
-<body style="background-color:  #007FFF;">
+<body style="background-color: #007FFF;">
   <h1 style="text-align: center;">Imagens do TurtleBot3</h1>
   <div style="text-align: center;">
     <img id="videoStream" alt="Video Stream" style="width: 640px; height: 480px;" />
   </div>
   <h2 style="text-align: center;">Latency: <span id="latency">N/A</span></h2>
+
+  <!-- Control buttons for the robot -->
+  <div style="text-align: center;">
+    <button class="botoes" onclick="sendCmdVel(0.2, 0.0)">Frente (W)</button>
+    <button class="botoes" onclick="sendCmdVel(-0.2, 0.0)">Trás (X)</button>
+    <button class="botoes" onclick="sendCmdVel(0.0, 0.5)">Esquerda (A)</button>
+    <button class="botoes" onclick="sendCmdVel(0.0, -0.5)">Direita (D)</button>
+    <button class="botoes" onclick="sendCmdVel(0.0, 0.0)">Parada de emergência (S)</button>
+    <button class="botoes" onclick="stopRobot()">Finalizar processo total (F)</button>
+  </div>
 </body>
 
 </html>

@@ -15,7 +15,7 @@ class WebcamPublisher(Node):
         super().__init__('webcam_publisher')
         self.publisher_ = self.create_publisher(CompressedImage, '/video_frames', 10)
 
-        self.latency_publisher_ = self.create_publisher(String, '/latency', 10)  # New latency topic
+        self.latency_publisher_ = self.create_publisher(String, '/latency', 10)  
 
         self.timer = self.create_timer(0.1, self.timer_callback)  
         self.cap = cv2.VideoCapture(index=0)
