@@ -83,36 +83,15 @@
       });
       cmdVelTopic.publish(twist);
 
-      // (linearVel == 0 && angularVel == 0) ? document.getElementById('status').innerHTML = 'Status do robô: Parado' : document.getElementById('status').innerHTML = 'Status do robô: Em movimento'
-
-      document.getElementById('status').innerHTML = 'Status do robô: Em movimento'
+      (linearVel == 0 && angularVel == 0) ? document.getElementById('status').innerHTML = 'Status do robô: Parado' : document.getElementById('status').innerHTML = 'Status do robô: Em movimento'
 
 
-      // document.getElementById('status').innerHTML = 'Status do robô: Em movimento'
+
 
       console.log("Linear Vel: " + linearVel + ", Angular Vel: " + angularVel);
     }
 
-    // Calling the stop_robot service
-    var stopRobotClient = new ROSLIB.Service({
-      ros: ros,
-      name: 'stop_robot',
-      serviceType: 'std_srvs/Empty'
-    });
-
-    function stopRobot() {
-      var request = new ROSLIB.ServiceRequest({});
-      stopRobotClient.callService(request, function (result) {
-        sendCmdVel(0.2, 0.0)
-        document.getElementById('status').innerHTML = 'Status do robô: Parado'
-        console.log('Robô parado com sucesso.');
-
-      }, function (error) {
-        console.error('Falha ao parar o robô: ' + error);
-      });
-
-    }
-
+   
     window.onload = function () {
       // Subscribe to video frames and latency once
       videoTopic.subscribe();
@@ -157,7 +136,7 @@
 </head>
 
 <body style="background-color: #007FFF;">
-  <h1 style="text-align: center;">Imagens do TurtleBot3</h1>
+  <h1 style="text-align: center;">Imagens do WebCam</h1>
   <div style="text-align: center;">
     <img id="videoStream" alt="Video Stream" style="width: 640px; height: 480px; border-radius: 30%;" />
   </div>
@@ -167,10 +146,9 @@
   <div style="text-align: center;">
     <button class="botoes" onclick="sendCmdVel(0.2, 0.0)">Frente (W)</button>
     <button class="botoes" onclick="sendCmdVel(-0.2, 0.0)">Trás (X)</button>
+    <button class="botoes" onclick="sendCmdVel(0.0, 0.0)"> Parada de emergência (S)</button>
     <button class="botoes" onclick="sendCmdVel(0.0, 0.5)">Esquerda (A)</button>
     <button class="botoes" onclick="sendCmdVel(0.0, -0.5)">Direita (D)</button>
-    <button class="botoes" onclick="stopRobot()"> Parada de emergência (S)</button>
-    <!-- <button class="botoes" onclick="stopRobot()">Finalizar processo total (F)</button> -->
 
     <strong>
       <p id="status">Status do robô: Parado</p>
