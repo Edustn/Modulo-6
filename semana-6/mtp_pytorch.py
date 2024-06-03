@@ -33,7 +33,6 @@ for epoch in range(epochs):
     # Atualizar os pesos
     optimizer.step()
     
-    # Imprimir a perda a cada 1000 épocas
     if (epoch + 1) % 1000 == 0:
         print(f'Epoch {epoch+1}/{epochs}, Loss: {loss.item()}')
 
@@ -44,7 +43,8 @@ predictions = model(inputs)
 predictions = predictions.round()  
 predictions = predictions.int()
 
-message = ""
 for i in predictions:
     print(i.numpy())
-# print(predictions.numpy())
+
+
+# video de referencia para implementacao: https://www.youtube.com/watch?v=3I_66lyFOqI
