@@ -1,96 +1,102 @@
 import numpy as np
-import math
 
-
-class Perceptron:
-    def __init__(self, num_inputs,weights=None, bias=-1, learning_rate=0.1, activation_threshold=0.5):
-        self.weights = [0.0] * num_inputs
+class MLP:
+    def __init__(self, num_inputs, num_hidden, num_outputs, learning_rate=0.1):
+        self.num_inputs = num_inputs
+        self.num_hidden = num_hidden
+        self.num_outputs = num_outputs
         self.learning_rate = learning_rate
 
-        if weights == None:
-            self.weights = np.array([1, 1])
-        else:
-            self.weights = np.array(weights)
-        self.bias = bias
-        self.activation_threshold = activation_threshold
-
-    def train(self, training_inputs, labels, epochs=15):
-        for i in range(epochs):
-            for inputs, label in zip(training_inputs, labels):
-                prediction = self.predict(inputs)
-                error = label - prediction
-                # Ajusta os pesos e o limiar
-                self.weights = [w + self.learning_rate * error * i for w, i in zip(self.weights, inputs)]
-                self.bias -= self.learning_rate * error
-
-            # print(1)
-
-    def predict(self,  inputs):
-        total = sum(w * i for w, i in zip(self.weights, inputs)) + self.bias
-
-        return 1 if total > self.bias else 0
-
-
-    def custo_mse(self, predict, real_value):
-        mse = np.mean((predict - real_value) ** 2)
-        return mse
-
-
-    def _heaviside(self, x):
-        """
-        Implementa a função delta de heaviside (famoso degrau)
-        Essa é uma função de ativação possível para os nós da rede neural.
-        """
-        return 1 if x >=  self.activation_threshold else 0
+        # Aqui esta havendo a inicializacao dos pesos
+        self.weights_input_hidden = np.random.rand(self.num_inputs, self.num_hidden)
+        self.weights_hidden_output = np.random.rand(self.num_hidden, self.num_outputs)
+        
+        # Aqui esta havendo a inicializacao dos bies do modelo
+        self.bias_hidden = np.random.rand(self.num_hidden)
+        self.bias_output = np.random.rand(self.num_outputs)
 
     def _sigmoid(self, x):
-        """
-        Implementa a função sigmoide
-        Essa é uma função de ativação possível para os nós da rede neural.
-        """
-        return 1/(1 + math.exp(-x))
-
-    def _activation(self, perceptron_output):
-        """
-        Implementação da função de ativação do perceptron
-        Escolha uma das funções de ativação possíveis
-        """
-        return self._heaviside(perceptron_output)
-
-    def forward_pass(self, data):
-        """
-        Implementa a etapa de inferência (feedforward) do perceptron.
-        """
-        weighted_sum = self.bias + np.dot(self.weights, data)
-        return self._activation(weighted_sum)
+        return 1 / (1 + np.exp(-x))
     
+    def _sigmoid_derivative(self, x):
+        return x * (1 - x)
+
+    def _mse(self, predictions, targets):
+        return np.mean((predictions - targets) ** 2)
+
+    def forward_pass(self, inputs):
+        # Hidden layer
+        self.hidden_layer_activation = np.dot(inputs, self.weights_input_hidden) + self.bias_hidden
+        self.hidden_layer_output = self._sigmoid(self.hidden_layer_activation)
+        
+        # Output layer
+        self.output_layer_activation = np.dot(self.hidden_layer_output, self.weights_hidden_output) + self.bias_output
+        self.output = self._sigmoid(self.output_layer_activation)
+        
+        return self.output
+
+    def train(self, training_inputs, labels, epochs=7000):
+        for epoch in range(epochs):
+            for inputs, label in zip(training_inputs, labels):
+               
+                output = self.forward_pass(inputs)
+                
+                # Calculo do erro do modelo 
+                error = label - output
+                
+                # Parte faz que faz o gradiente
+                d_output = error * self._sigmoid_derivative(output)
+                
+                # Camada escondida
+                error_hidden_layer = d_output.dot(self.weights_hidden_output.T)
+                d_hidden_layer = error_hidden_layer * self._sigmoid_derivative(self.hidden_layer_output)
+                
+                # Atualizacao dos pesos e dos bais conforme se deu o calculo do gradiente
+                self.weights_hidden_output += self.hidden_layer_output[:, np.newaxis].dot(d_output[np.newaxis, :]) * self.learning_rate
+                self.bias_output += d_output * self.learning_rate
+
+                self.weights_input_hidden += np.array(inputs)[:, np.newaxis].dot(d_hidden_layer[np.newaxis, :]) * self.learning_rate
+                self.bias_hidden += d_hidden_layer * self.learning_rate
+
+            if epoch % 1000 == 0:
+                predictions, _ = self.predict(training_inputs)
+                mse = self._mse(predictions, labels)
+                print(f'Epoch: {epoch}, MSE: {mse}')
+
+    def predict(self, inputs):
+        predictions = []
+        binary_predictions = []
+        for inp in inputs:
+            output = self.forward_pass(inp)
+            predictions.append(output)
+            binary_predictions.append(1 if output >= 0.5 else 0)
+        return np.array(predictions), np.array(binary_predictions)
 
 def main():
-    predict_values = []
-    
-    training_inputs = [
+    training_inputs = np.array([
         [0, 0],
         [0, 1],
         [1, 0],
         [1, 1]
-        ]
+    ])
     
-    labels = [0, 1, 1, 0]
-
+    labels = np.array([
+        [0],
+        [1],
+        [1],
+        [0]
+    ])
     
+    mlp = MLP(num_inputs=2, num_hidden=2, num_outputs=1)
+    mlp.train(training_inputs, labels)
     
-    perceptron = Perceptron(num_inputs= len(training_inputs))
-    
-    perceptron.train(training_inputs, labels)
-    
-    for i in range(len(training_inputs)):
-        predict_values.append(perceptron.predict(training_inputs[i]))
-    
-    print(perceptron.custo_mse(np.array(predict_values), np.array(labels)))
-    # print(perceptron.predict(training_inputs[2]))
-    
-
-
+    predictions, binary_predictions = mlp.predict(training_inputs)
+    mse = mlp._mse(predictions, labels)
+    print(f'Final MSE: {mse}')
+    print('Predictions (continuous):')
+    print(predictions)
+    print('Resultado da predicao:')
+    print(binary_predictions)
 
 if __name__ == "__main__":
     main()
