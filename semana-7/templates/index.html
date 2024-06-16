@@ -7,14 +7,24 @@
     <title>Upload file</title>
 </head>
 
-<body>
+<body style=" background-color: aqua;">
     <form action="/upload" enctype="multipart/form-data" method="post">
         <p>
             <input type="file" name="imagem" id="imagem">
-        </p>
-        
+         </p>
+
         <p>
-            <button type="submit">Enviar</button>
+            <button type="submit">Enviar para o CNN</button>
+        </p>
+    </form>
+    <br>
+
+    <form action="/upload_linear" enctype="multipart/form-data" method="post">
+        <p>
+            <input type="file" name="imagem" id="imagem">
+        </p>
+        <p>
+            <button type="submit">Enviar para o Linear</button>
         </p>
     </form>
 </body>

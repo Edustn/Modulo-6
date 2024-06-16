@@ -2,6 +2,8 @@ import os
 from flask import Flask, render_template, request
 from werkzeug.utils import secure_filename
 from predicao import predict
+from predicao_linear import predict_linear
+
 
 app = Flask(__name__)
 UPLOAD_FOLDER = os.path.join(os.getcwd(),'upload')
@@ -16,6 +18,14 @@ def upload():
     savePath = os.path.join(UPLOAD_FOLDER, secure_filename(file.filename))
     file.save(savePath)
     resultado = predict()
+    return render_template('predicao.html', resultado = resultado)
+
+@app.route("/upload_linear", methods=['POST'])
+def upload_linear():
+    file = request.files['imagem']
+    savePath = os.path.join(UPLOAD_FOLDER, secure_filename(file.filename))
+    file.save(savePath)
+    resultado = predict_linear()
     return render_template('predicao.html', resultado = resultado)
 
 
